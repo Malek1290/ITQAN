@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>إتقان - أكاديمية حفظ القرآن الكريم</title>
+<meta name="description" content="إتقان - تطبيق لمتابعة تقدم أبنائك في حفظ القرآن الكريم">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:'Tajawal',sans-serif;background:#F1ECE4;color:#2A1E14;overflow-x:hidden;line-height:1.7}
+a{text-decoration:none;color:inherit}
+ul{list-style:none}
+img{max-width:100%;display:block}
+
+.grain{position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:.03;
+background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* NAVBAR */
+.navbar{position:fixed;top:0;left:0;right:0;z-index:1000;padding:1rem 2rem;
+background:rgba(241,236,228,.88);backdrop-filter:blur(14px);
+border-bottom:2.5px solid rgba(42,30,20,.08);
+transition:transform .4s cubic-bezier(.4,0,.2,1),opacity .4s}
+.navbar.hidden{transform:translateY(-100%);opacity:0}
+.nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{display:flex;align-items:center;gap:.75rem;cursor:pointer}
+.nav-logo-icon{width:44px;height:44px;background:#2f6b5e;border-radius:14px;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:2px;
+font-family:'Amiri',serif;font-size:1.4rem;color:#FAF6EE;font-weight:700;
+border:2.5px solid rgba(47,107,94,.3);box-shadow:3px 3px 0 rgba(47,107,94,.15)}
+.nav-logo-text{font-family:'Amiri',serif;font-size:1.7rem;font-weight:700;color:#2f6b5e}
+.nav-links{display:flex;gap:2rem;align-items:center}
+.nav-links a{font-size:.95rem;font-weight:500;color:rgba(42,30,20,.7);position:relative;transition:color .3s}
+.nav-links a:hover{color:#2f6b5e}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;right:0;width:0;height:2.5px;background:#2f6b5e;border-radius:2px;transition:width .3s}
+.nav-links a:hover::after{width:100%}
+.nav-cta{background:#2f6b5e;color:#FAF6EE!important;padding:.6rem 1.6rem;border-radius:50px;font-weight:700;font-size:.9rem;
+border:2.5px solid #2f6b5e;transition:all .3s;cursor:pointer}
+.nav-cta:hover{background:transparent;color:#2f6b5e!important}
+.nav-cta::after{display:none!important}
+.mobile-toggle{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px}
+.mobile-toggle span{width:24px;height:2.5px;background:#2A1E14;border-radius:2px;transition:all .3s}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;align-items:center;padding:7rem 2rem 5rem;position:relative;overflow:hidden}
+.hero-bg-pattern{position:absolute;inset:0;opacity:.015;pointer-events:none;
+background-image:repeating-linear-gradient(0deg,transparent,transparent 49px,rgba(42,30,20,.3) 49px,rgba(42,30,20,.3) 50px),
+repeating-linear-gradient(90deg,transparent,transparent 49px,rgba(42,30,20,.3) 49px,rgba(42,30,20,.3) 50px)}
+.hero-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;width:100%;position:relative;z-index:1}
+.hero-text{text-align:right}
+.hero-badge{display:inline-flex;align-items:center;gap:.6rem;background:rgba(47,107,94,.08);border:2.5px solid rgba(47,107,94,.2);
+border-radius:50px;padding:.45rem 1.3rem;font-size:.85rem;font-weight:600;color:#2f6b5e;margin-bottom:1.75rem}
+.hero-badge .dot{width:8px;height:8px;background:#2f6b5e;border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.8)}}
+.hero-title{font-family:'Amiri',serif;font-size:clamp(2.8rem,5.5vw,4.5rem);line-height:1.25;margin-bottom:1.5rem;color:#2A1E14;letter-spacing:-.02em}
+.hero-title .teal{color:#2f6b5e;position:relative;display:inline-block}
+.hero-title .teal::after{content:'';position:absolute;bottom:4px;left:0;right:0;height:8px;background:rgba(47,107,94,.12);border-radius:4px;z-index:-1}
+.hero-subtitle{font-size:1.15rem;color:rgba(42,30,20,.6);margin-bottom:2.25rem;max-width:480px;margin-left:auto;line-height:1.9}
+.hero-buttons{display:flex;gap:1rem;justify-content:flex-end;flex-wrap:wrap}
+.btn-primary{background:#2f6b5e;color:#FAF6EE;padding:.9rem 2.2rem;border-radius:50px;font-weight:700;font-size:1rem;
+border:2.5px solid #2f6b5e;cursor:pointer;transition:all .3s;display:inline-flex;align-items:center;gap:.6rem}
+.btn-primary:hover{background:#245c50;transform:translateY(-2px);box-shadow:0 8px 28px rgba(47,107,94,.3)}
+.btn-secondary{background:transparent;color:#2A1E14;padding:.9rem 2.2rem;border-radius:50px;font-weight:700;font-size:1rem;
+border:2.5px solid rgba(42,30,20,.15);cursor:pointer;transition:all .3s;display:inline-flex;align-items:center;gap:.6rem}
+.btn-secondary:hover{border-color:#2f6b5e;color:#2f6b5e;transform:translateY(-2px)}
+
+/* Hero phone cluster */
+.hero-visual{position:relative;display:flex;justify-content:center;align-items:center;min-height:580px}
+.hero-phone-main{width:270px;height:540px;background:#FAF6EE;border-radius:36px;border:2.5px solid rgba(42,30,20,.12);display:flex;align-items:center;justify-content:center;
+overflow:hidden;box-shadow:10px 10px 0 rgba(42,30,20,.06),0 30px 60px rgba(42,30,20,.15);
+position:relative;z-index:3}
+.hero-phone-main img{width:100%;height:100%;object-fit:cover}
+.hero-phone-side{position:absolute;width:220px;height:440px;background:#FAF6EE;border-radius:30px;border:2.5px solid rgba(42,30,20,.08);display:flex;align-items:center;justify-content:center;
+overflow:hidden;box-shadow:6px 6px 0 rgba(42,30,20,.04),0 15px 40px rgba(42,30,20,.1);z-index:1;opacity:.7}
+.hero-phone-side img{width:100%;height:100%;object-fit:cover}
+.hero-phone-side.left{left:-60px;top:40px;transform:rotate(-6deg)}
+.hero-phone-side.right{right:-60px;top:60px;transform:rotate(5deg)}
+.hero-glow{position:absolute;width:500px;height:500px;border-radius:50%;
+background:radial-gradient(circle,rgba(47,107,94,.08) 0%,transparent 70%);
+top:50%;left:50%;transform:translate(-50%,-50%);z-index:0}
+
+/* Hero stats */
+.hero-stats{display:flex;gap:2.5rem;margin-top:2.75rem;justify-content:flex-end}
+.stat{text-align:center}
+.stat-num{font-size:2.2rem;font-weight:800;color:#2f6b5e;display:block;line-height:1.1}
+.stat-label{font-size:.8rem;color:rgba(42,30,20,.45);font-weight:500;margin-top:2px}
+
+/* SECTION COMMON */
+.section{padding:5rem 2rem;position:relative}
+.section-inner{max-width:1200px;margin:0 auto}
+.section-header{text-align:center;margin-bottom:4rem}
+.section-label{display:inline-flex;align-items:center;gap:.5rem;font-size:.85rem;font-weight:600;color:#2f6b5e;
+margin-bottom:.75rem}
+.section-title{font-family:'Amiri',serif;font-size:clamp(1.8rem,3.5vw,2.8rem);color:#2A1E14;margin-bottom:1rem;line-height:1.4}
+.section-desc{font-size:1.05rem;color:rgba(42,30,20,.55);max-width:600px;margin:0 auto;line-height:1.8}
+
+/* FEATURES */
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem}
+.feature-card{background:#FAF6EE;border:2.5px solid rgba(42,30,20,.07);border-radius:22px;padding:2rem;
+box-shadow:5px 5px 0 rgba(42,30,20,.03);transition:all .4s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden}
+.feature-card:hover{transform:translateY(-6px);box-shadow:8px 8px 0 rgba(42,30,20,.05),0 20px 48px rgba(42,30,20,.08);
+border-color:rgba(47,107,94,.18)}
+.feature-icon{width:54px;height:54px;border-radius:16px;display:flex;align-items:center;justify-content:center;
+margin-bottom:1.25rem}
+.feature-icon.teal{background:rgba(47,107,94,.1);color:#2f6b5e}
+.feature-icon.honey{background:rgba(139,111,42,.1);color:#8B6F2A}
+.feature-icon.plum{background:rgba(74,43,107,.1);color:#4A2B6B}
+.feature-title{font-size:1.12rem;font-weight:700;margin-bottom:.7rem;color:#2A1E14}
+.feature-desc{font-size:.88rem;color:rgba(42,30,20,.55);line-height:1.7}
+
+/* SCREENSHOTS - INFINITE SCROLL */
+.screens-container{overflow:hidden;padding:2.5rem 0;position:relative;direction:ltr}
+.screens-container::before,.screens-container::after{content:'';position:absolute;top:0;bottom:0;width:100px;z-index:2;pointer-events:none}
+.screens-container::before{right:0;background:linear-gradient(to left,#F1ECE4,transparent)}
+.screens-container::after{left:0;background:linear-gradient(to right,#F1ECE4,transparent)}
+.screens-track{display:flex;flex-direction:row;flex-wrap:nowrap;align-items:stretch;gap:1.8rem;width:max-content;animation:marqueeRTL 32s linear infinite;will-change:transform;direction:ltr}
+.screens-track:hover{animation-play-state:paused}
+@keyframes marqueeRTL{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.screen-item{flex:0 0 260px;width:260px;direction:rtl;display:flex;flex-direction:column;align-items:center}
+.screen-phone{width:260px;height:520px;background:#FAF6EE;border-radius:32px;border:2.5px solid rgba(42,30,20,.1);
+overflow:hidden;box-shadow:6px 6px 0 rgba(42,30,20,.04),0 12px 40px rgba(42,30,20,.1);
+position:relative;transition:transform .4s cubic-bezier(.4,0,.2,1)}
+.screen-phone:hover{transform:scale(1.04) translateY(-6px)}
+.screen-phone img{width:100%;height:100%;object-fit:cover}
+.screen-label{text-align:center;margin-top:1rem;font-weight:700;font-size:.95rem;color:#2A1E14}
+.screen-sublabel{text-align:center;font-size:.78rem;color:rgba(42,30,20,.45)}
+
+
+/* Fix: منع تكديس الصور */
+.screens-track{flex-wrap:nowrap !important}
+.screen-item{flex-shrink:0 !important;min-width:0}
+.screen-phone{flex-shrink:0;display:flex;align-items:center;justify-content:center;background:#FAF6EE}
+.screen-phone img{width:100%;height:100%;object-fit:cover;display:block;flex-shrink:0}
+
+/* HOW IT WORKS */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;counter-reset:step}
+.step{text-align:center;position:relative;counter-increment:step;padding:1.5rem 1rem;
+background:#FAF6EE;border:2.5px solid rgba(42,30,20,.06);border-radius:22px;
+box-shadow:4px 4px 0 rgba(42,30,20,.03);transition:all .3s}
+.step:hover{transform:translateY(-4px);box-shadow:6px 6px 0 rgba(42,30,20,.05);border-color:rgba(47,107,94,.15)}
+.step::before{content:counter(step);display:flex;align-items:center;justify-content:center;
+width:52px;height:52px;border-radius:50%;background:#2f6b5e;color:#FAF6EE;
+font-size:1.3rem;font-weight:800;margin:0 auto 1rem;
+box-shadow:3px 3px 0 rgba(47,107,94,.15)}
+.step-title{font-size:1.05rem;font-weight:700;margin-bottom:.5rem;color:#2A1E14}
+.step-desc{font-size:.82rem;color:rgba(42,30,20,.5);line-height:1.7}
+
+/* CTA */
+.cta{background:linear-gradient(135deg,#2f6b5e 0%,#245c50 100%);border-radius:28px;padding:4.5rem;text-align:center;
+position:relative;overflow:hidden;border:2.5px solid rgba(47,107,94,.25);
+box-shadow:10px 10px 0 rgba(42,30,20,.06)}
+.cta-title{font-family:'Amiri',serif;font-size:clamp(1.8rem,3.2vw,2.8rem);color:#FAF6EE;margin-bottom:1rem;line-height:1.4}
+.cta-desc{color:rgba(250,246,238,.7);font-size:1.05rem;margin-bottom:2.25rem;max-width:520px;margin-left:auto;margin-right:auto;line-height:1.8}
+.cta-buttons{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+.btn-white{background:#FAF6EE;color:#2f6b5e;padding:.9rem 2.2rem;border-radius:50px;font-weight:700;font-size:1rem;
+border:2.5px solid #FAF6EE;cursor:pointer;transition:all .3s;display:inline-flex;align-items:center;gap:.6rem}
+.btn-white:hover{background:transparent;color:#FAF6EE;transform:translateY(-2px)}
+.btn-outline-white{background:transparent;color:#FAF6EE;padding:.9rem 2.2rem;border-radius:50px;font-weight:700;font-size:1rem;
+border:2.5px solid rgba(250,246,238,.25);cursor:pointer;transition:all .3s;display:inline-flex;align-items:center;gap:.6rem}
+.btn-outline-white:hover{border-color:#FAF6EE;transform:translateY(-2px)}
+.cta-decor{position:absolute;border-radius:50%;opacity:.06}
+.cta-decor.c1{width:350px;height:350px;background:#8B6F2A;top:-100px;right:-100px}
+.cta-decor.c2{width:250px;height:250px;background:#4A2B6B;bottom:-80px;left:-80px}
+
+/* FOOTER */
+.footer{padding:3rem 2rem;border-top:2.5px solid rgba(42,30,20,.06)}
+.footer-inner{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+.footer-logo{display:flex;align-items:center;gap:.6rem;font-family:'Amiri',serif;font-size:1.2rem;font-weight:700;color:#2f6b5e}
+.footer-links{display:flex;gap:1.5rem;font-size:.85rem;color:rgba(42,30,20,.45)}
+.footer-links a{transition:color .3s}
+.footer-links a:hover{color:#2f6b5e}
+.footer-copy{font-size:.78rem;color:rgba(42,30,20,.3)}
+
+/* RESPONSIVE - Improved */
+@media(max-width:1024px){
+  .features-grid{grid-template-columns:repeat(2,1fr)}
+  .steps{grid-template-columns:repeat(3,1fr);gap:1.5rem}
+}
+@media(max-width:768px){
+  .hero-inner{grid-template-columns:1fr;text-align:center;gap:2.2rem;padding:0 1rem}
+  .hero-text{text-align:center}
+  .hero-subtitle{margin:0 auto 2rem}
+  .hero-buttons{justify-content:center}
+  .hero-stats{justify-content:center;gap:1.8rem}
+  .hero-visual{order:-1;min-height:420px}
+  .hero-phone-main{width:230px;height:460px}
+  .hero-phone-side{display:none}
+  .features-grid{grid-template-columns:1fr}
+  .steps{grid-template-columns:1fr;max-width:420px;margin:0 auto}
+  .nav-links{display:none}
+  .mobile-toggle{display:flex}
+  .navbar.open .nav-links{display:flex;flex-direction:column;position:absolute;top:100%;right:0;left:0;
+    background:rgba(241,236,228,.97);padding:1.2rem 2rem;border-bottom:2.5px solid rgba(42,30,20,.1);gap:1.1rem;align-items:stretch}
+  .navbar.open .nav-links a{text-align:center;padding:.5rem 0}
+  .navbar.open .nav-cta{text-align:center;justify-content:center;display:flex}
+  .screens-container{padding:1.2rem 0 1.5rem}
+  .screens-container::before,.screens-container::after{width:40px}
+  .screens-track{gap:1rem;animation-duration:24s}
+  .screen-item{width:240px}
+  .screen-phone{width:240px;height:480px;border-radius:28px}
+  .cta{padding:2.5rem 1.5rem;border-radius:22px}
+  .section{padding:3.5rem 1.25rem}
+}
+@media(max-width:600px){
+  .hero{padding:6rem 1rem 3rem}
+  .hero-title{font-size:clamp(2.2rem,8vw,3rem)}
+  .hero-subtitle{font-size:1rem}
+  .screens-track{gap:.9rem;animation-duration:18s}
+  .screen-item{width:68vw;max-width:260px}
+  .screen-phone{width:100%;height:118vw;max-height:480px;max-width:260px;border-radius:26px}
+  .screen-label{font-size:.9rem}
+  .section-title{font-size:clamp(1.6rem,6vw,2.2rem)}
+}
+@media(max-width:480px){
+  .hero-stats{flex-wrap:wrap;gap:1rem 1.5rem}
+  .hero-stats .stat{flex:1 1 70px}
+  .hero-buttons{flex-direction:column;align-items:stretch;width:100%;max-width:340px;margin:0 auto}
+  .hero-buttons .btn-primary,.hero-buttons .btn-secondary{justify-content:center;width:100%;padding:.85rem 1.5rem}
+  .cta{padding:2rem 1.25rem}
+  .cta-buttons{flex-direction:column;align-items:stretch;gap:.8rem}
+  .cta-buttons .btn-white,.cta-buttons .btn-outline-white{justify-content:center;width:100%}
+  .screens-container::before,.screens-container::after{display:none}
+  .section{padding:3rem 1rem}
+  .features-grid{gap:1.25rem}
+  .feature-card{padding:1.5rem}
+}
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+
+<!-- Navbar -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <div class="nav-logo-icon"><img src="ic_launcher.png" alt="logo" style="width:100%;height:100%;object-fit:contain;border-radius:12px;"></div>
+      <span class="nav-logo-text">إتقان</span>
+    </a>
+    <div class="nav-links">
+      <a href="#features">المميزات</a>
+      <a href="#screens">الشاشات</a>
+      <a href="#how">كيف يعمل</a>
+      <a href="#cta" class="nav-cta">حمّل التطبيق</a>
+    </div>
+    <div class="mobile-toggle" onclick="document.getElementById('navbar').classList.toggle('open')">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero" id="hero">
+  <div class="hero-bg-pattern"></div>
+  <div class="hero-inner">
+    <div class="hero-text">
+      <div class="hero-badge"><span class="dot"></span> تطبيق تعليمي مجاني</div>
+      <h1 class="hero-title">ساعد ابنك ي<span class="teal">حفظ</span><br>القرآن الكريم</h1>
+      <p class="hero-subtitle">إتقان — تطبيق ذكي لمتابعة تقدم أبنائك في حفظ القرآن الكريم ومراجعته، مع تلاوات أشهر القرّاء، أذكار يومية، وقصص تعليمية</p>
+      <div class="hero-buttons">
+        <button class="btn-primary" onclick="document.getElementById('cta').scrollIntoView({behavior:'smooth'})">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+          حمّل التطبيق
+        </button>
+        <button class="btn-secondary" onclick="document.getElementById('screens').scrollIntoView({behavior:'smooth'})">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          شاهد الشاشات
+        </button>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><span class="stat-num" data-count="10">0</span><span class="stat-label">قرّاء متاحين</span></div>
+        <div class="stat"><span class="stat-num" data-count="275">0</span><span class="stat-label">فيديو تعليمي</span></div>
+        <div class="stat"><span class="stat-num" data-count="6">0</span><span class="stat-label">مجموعات قصص</span></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-glow"></div>
+      <div class="hero-phone-side left">
+        <img src="azkar.png" alt="الأذكار">
+      </div>
+      <div class="hero-phone-main">
+        <img src="home.png" alt="إتقان">
+      </div>
+      <div class="hero-phone-side right">
+        <img src="quran.png" alt="القرآن">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section class="section" id="features">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-label">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2f6b5e" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        المميزات
+      </div>
+      <h2 class="section-title">كل ما تحتاجه في مكان واحد</h2>
+      <p class="section-desc">أدوات شاملة مصممة خصيصاً لمتابعة حفظ القرآن الكريم</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon teal">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+        </div>
+        <h3 class="feature-title">قراءة القرآن الكريم</h3>
+        <p class="feature-desc">تصفح جميع السور بخط عثماني واضح مع إمكانية الاستماع لتلاوات أشهر القرّاء والتدبر بالتفسير</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon honey">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <h3 class="feature-title">متابعة الحفظ والمراجعة</h3>
+        <p class="feature-desc">تتبع السور المحفوظة والورد اليومي ومستوى كل طالب مع تقارير مفصلة</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon plum">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+        </div>
+        <h3 class="feature-title">استماع للتلاوات</h3>
+        <p class="feature-desc">اختر من بين 10 قرّاء واستمع لكل آية مع تكرار وتشغيل تلقائي للسورة التالية</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon teal">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        </div>
+        <h3 class="feature-title">الأذكار والأدعية</h3>
+        <p class="feature-desc">أذكار الصباح والمساء وأذكار بعد الصلاة مع إمكانية الاستماع صوتياً</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon honey">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        </div>
+        <h3 class="feature-title">فيديوهات وقصص تعليمية</h3>
+        <p class="feature-desc">أكثر من 275 فيديو في 6 مجموعات تشمل قصص الأنبياء وعلماء المسلمين</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon plum">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <h3 class="feature-title">مواقيت الصلاة</h3>
+        <p class="feature-desc">مواقيت الصلاة اليومية حسب موقعك مع إشعارات الأذان وعد تنازلي لكل صلاة</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Screenshots - INFINITE SCROLL -->
+<section class="section" id="screens" style="background:rgba(250,246,238,.4)">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-label">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2f6b5e" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        الشاشات
+      </div>
+      <h2 class="section-title">شاهد التطبيق عن قرب</h2>
+      <p class="section-desc">تصفح شاشات التطبيق واكتشف التجربة المصممة بعناية</p>
+    </div>
+  </div>
+  <div class="screens-container">
+    <div class="screens-track" id="screensTrack">
+      <!-- مجموعة أولى -->
+      <div class="screen-item">
+        <div class="screen-phone">
+          <img src="home.png" alt="الرئيسية">
+        </div>
+        <div class="screen-label">الصفحة الرئيسية</div>
+        <div class="screen-sublabel">لوحة تحكم ولي الأمر</div>
+      </div>
+      <div class="screen-item">
+        <div class="screen-phone">
+          <img src="read.png" alt="القرآن">
+        </div>
+        <div class="screen-label">قراءة القرآن</div>
+        <div class="screen-sublabel">خط عثماني + تلاوة + تفسير</div>
+      </div>
+      <div class="screen-item">
+        <div class="screen-phone">
+          <img src="azkar.png" alt="الأذكار">
+        </div>
+        <div class="screen-label">الأذكار والأدعية</div>
+        <div class="screen-sublabel">أذكار الصباح والمساء</div>
+      </div>
+      <div class="screen-item">
+        <div class="screen-phone">
+          <img src="pray.png" alt="مواقيت الصلاة">
+        </div>
+        <div class="screen-label">مواقيت الصلاة</div>
+        <div class="screen-sublabel">أوقات الصلاة والأذان</div>
+      </div>
+      <div class="screen-item">
+        <div class="screen-phone">
+          <img src="story.png" alt="القصص">
+        </div>
+        <div class="screen-label">القصص والمواعظ</div>
+        <div class="screen-sublabel">275+ فيديو تعليمي</div>
+      </div>
+      <!-- مجموعة مكررة للحركة السلسة من اليمين للشمال -->
+      <div class="screen-item">
+        <div class="screen-phone">
+          <img src="home.png" alt="الرئيسية">
+        </div>
+        <div class="screen-label">الصفحة الرئيسية</div>
+        <div class="screen-sublabel">لوحة تحكم ولي الأمر</div>
+      </div>
+      <div class="screen-item">
+        <div class="screen-phone">
+          <img src="read.png" alt="القرآن">
+        </div>
+        <div class="screen-label">قراءة القرآن</div>
+        <div class="screen-sublabel">خط عثماني + تلاوة + تفسير</div>
+      </div>
+      <div class="screen-item">
+        <div class="screen-phone">
+          <img src="azkar.png" alt="الأذكار">
+        </div>
+        <div class="screen-label">الأذكار والأدعية</div>
+        <div class="screen-sublabel">أذكار الصباح والمساء</div>
+      </div>
+      <div class="screen-item">
+        <div class="screen-phone">
+          <img src="pray.png" alt="مواقيت الصلاة">
+        </div>
+        <div class="screen-label">مواقيت الصلاة</div>
+        <div class="screen-sublabel">أوقات الصلاة والأذان</div>
+      </div>
+      <div class="screen-item">
+        <div class="screen-phone">
+          <img src="story.png" alt="القصص">
+        </div>
+        <div class="screen-label">القصص والمواعظ</div>
+        <div class="screen-sublabel">275+ فيديو تعليمي</div>
+      </div>
+    </div>
+  </div>
+</section>
+</section>
+
+<!-- How It Works -->
+<section class="section" id="how">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-label">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2f6b5e" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        كيف يعمل
+      </div>
+      <h2 class="section-title">ابدأ في 3 خطوات بسيطة</h2>
+      <p class="section-desc">رحلة سهلة من التسجيل إلى متابعة الحفظ</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <h3 class="step-title">سجّل حساب الطالب</h3>
+        <p class="step-desc">أنشئ حساب باسم الطالب بإيميل وكلمة مرور</p>
+      </div>
+      <div class="step">
+        <h3 class="step-title">تابع التقدم يومياً</h3>
+        <p class="step-desc">شاهد تقارير الحفظ والمراجعة ومستوى الأداء</p>
+      </div>
+      <div class="step">
+        <h3 class="step-title">استفد من كل الأدوات</h3>
+        <p class="step-desc">تلاوات، أذكار، قصص، مواعظ، ومواقيت الصلاة</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section" id="cta">
+  <div class="section-inner">
+    <div class="cta">
+      <div class="cta-decor c1"></div>
+      <div class="cta-decor c2"></div>
+      <h2 class="cta-title">ابدأ رحلة حفظ القرآن مع أبنائك اليوم</h2>
+      <p class="cta-desc">حمّل تطبيق إتقان مجاناً وابدأ في متابعة تقدم أبنائك في حفظ كتاب الله تعالى</p>
+      <div class="cta-buttons">
+        <a class="btn-white" href="https://github.com/Malek1290/ITQAN/releases/download/ITQAN/ITQAN.apk">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+          حمّل لأندرويد
+        </a>
+        <button class="btn-outline-white">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+          نسخة الويب قريباً
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <svg width="24" height="24" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="18" stroke="#2f6b5e" stroke-width="2.5"/><text x="20" y="27" text-anchor="middle" font-family="Amiri" font-size="18" fill="#2f6b5e">إ</text></svg>
+      إتقان
+    </div>
+    <div class="footer-links">
+      <a href="#features">المميزات</a>
+      <a href="#screens">الشاشات</a>
+      <a href="#how">كيف يعمل</a>
+    </div>
+    <div class="footer-copy">© 2025 إتقان — أكاديمية حفظ القرآن الكريم</div>
+  </div>
+</footer>
+
+<!-- GSAP -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+// Navbar hide on scroll
+let lastScroll = 0;
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  const curr = window.scrollY;
+  if (curr > lastScroll && curr > 80) navbar.classList.add('hidden');
+  else navbar.classList.remove('hidden');
+  lastScroll = curr;
+});
+
+// Close mobile menu on link click
+document.querySelectorAll('.nav-links a').forEach(a => {
+  a.addEventListener('click', () => navbar.classList.remove('open'));
+});
+
+gsap.registerPlugin(ScrollTrigger);
+
+// Hero entrance
+const heroTL = gsap.timeline({defaults:{ease:'power3.out'}});
+heroTL
+  .from('.hero-badge',{y:30,opacity:0,duration:.7})
+  .from('.hero-title',{y:50,opacity:0,duration:.9},'-=.4')
+  .from('.hero-subtitle',{y:30,opacity:0,duration:.8},'-=.5')
+  .from('.hero-buttons > *',{y:25,opacity:0,duration:.7,stagger:.12},'-=.4')
+  .from('.hero-stats .stat',{y:20,opacity:0,duration:.5,stagger:.12},'-=.3')
+  .from('.hero-glow',{scale:0,opacity:0,duration:1.2,ease:'power2.out'},'-=1')
+  .from('.hero-phone-side.left',{x:60,opacity:0,rotation:-12,duration:.9,ease:'back.out(1.2)'},'-=.8')
+  .from('.hero-phone-main',{y:50,opacity:0,scale:.9,duration:1,ease:'back.out(1.5)'},'-=.6')
+  .from('.hero-phone-side.right',{x:-60,opacity:0,rotation:12,duration:.9,ease:'back.out(1.2)'},'-=.7');
+
+// Floating animation for side phones
+gsap.to('.hero-phone-side.left', {
+  y: -12, rotation: -6, duration: 3, repeat: -1, yoyo: true, ease: 'sine.inOut'
+});
+gsap.to('.hero-phone-side.right', {
+  y: -10, rotation: 5, duration: 3.5, repeat: -1, yoyo: true, ease: 'sine.inOut', delay: .5
+});
+
+// Counter animation
+document.querySelectorAll('[data-count]').forEach(el => {
+  const target = parseInt(el.dataset.count);
+  ScrollTrigger.create({
+    trigger: el,
+    start: 'top 88%',
+    once: true,
+    onEnter: () => {
+      let obj = {val:0};
+      gsap.to(obj,{val:target,duration:1.8,ease:'power2.out',
+        onUpdate:()=>{ el.textContent = Math.round(obj.val) }});
+    }
+  });
+});
+
+// Feature cards
+gsap.utils.toArray('.feature-card').forEach((card, i) => {
+  gsap.from(card, {
+    y: 50, opacity: 0, duration: .7,
+    ease: 'power3.out',
+    scrollTrigger: { trigger: card, start: 'top 88%', once: true }
+  });
+});
+
+// Screens section
+gsap.from('#screens .section-header', {
+  y: 40, opacity: 0, duration: .8,
+  scrollTrigger: { trigger: '#screens', start: 'top 75%', once: true }
+});
+
+// Steps
+gsap.utils.toArray('.step').forEach((step, i) => {
+  gsap.from(step, {
+    y: 40, opacity: 0, duration: .6, delay: i * .1,
+    ease: 'power3.out',
+    scrollTrigger: { trigger: step, start: 'top 88%', once: true }
+  });
+});
+
+// CTA
+gsap.from('.cta', {
+  scale: .92, opacity: 0, duration: 1,
+  ease: 'power3.out',
+  scrollTrigger: { trigger: '.cta', start: 'top 80%', once: true }
+});
+
+// Parallax hero on scroll
+gsap.to('.hero-phone-main', {
+  y: -40,
+  scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 1.5 }
+});
+</script>
+
+<script>
+// --- تحسين سكشن الشاشات: حركة من اليمين للشمال + Responsive للتليفون ---
+(function(){
+  const track = document.getElementById('screensTrack');
+  const container = document.querySelector('.screens-container');
+  if(!track || !container) return;
+
+  // تأكيد اتجاه الحركة من اليمين للشمال (RTL appearance)
+  // الحركة الأساسية via CSS marqueeRTL (يمين -> شمال). نضيف تحكم إضافي للموبايل
+
+  // Pause on hover / touch
+  let isHovering = false;
+  container.addEventListener('mouseenter', ()=> { track.style.animationPlayState='paused'; isHovering=true; });
+  container.addEventListener('mouseleave', ()=> { if(!isDragging) track.style.animationPlayState='running'; isHovering=false; });
+  container.addEventListener('touchstart', ()=> { track.style.animationPlayState='paused'; }, {passive:true});
+  container.addEventListener('touchend', ()=> { setTimeout(()=>{ if(!isDragging) track.style.animationPlayState='running'; }, 1200); }, {passive:true});
+
+  // Drag / Swipe support للموبايل والكمبيوتر
+  let isDragging = false, startX = 0, currentX = 0, startTransform = 0, animBeforeDrag = '';
+  let rafId = null;
+  
+  // نحسب موضع الـ transform الحالي
+  function getTranslateX(el){
+    const style = window.getComputedStyle(el);
+    const matrix = new DOMMatrixReadOnly(style.transform);
+    return matrix.m41;
+  }
+
+  container.addEventListener('pointerdown', (e)=>{
+    isDragging = true;
+    container.classList.add('dragging');
+    container.setPointerCapture(e.pointerId);
+    animBeforeDrag = track.style.animationPlayState;
+    // أوقف الأنيميشن واحتفظ بالموضع الحالي كـ transform ثابت
+    const curX = getTranslateX(track);
+    track.style.animation = 'none';
+    track.style.transform = `translateX(${curX}px)`;
+    startX = e.clientX;
+    startTransform = curX;
+    track.style.transition = 'none';
+    if(rafId) cancelAnimationFrame(rafId);
+  });
+
+  container.addEventListener('pointermove', (e)=>{
+    if(!isDragging) return;
+    currentX = e.clientX - startX;
+    let nextX = startTransform + currentX;
+    // حدود مرنة - نسمح بسحب خفيف خارج الحدود مع مقاومة
+    track.style.transform = `translateX(${nextX}px)`;
+  });
+
+  function handlePointerUp(e){
+    if(!isDragging) return;
+    isDragging = false;
+    container.classList.remove('dragging');
+    try{ container.releasePointerCapture(e.pointerId); }catch(_){}
+    
+    // إعادة تفعيل الأنيميشن بعد السحب مع تصحيح الموضع لضمان استمرار من اليمين للشمال
+    const moved = currentX;
+    // لو المستخدم سحب لليسار (حركة طبيعية يمين->شمال) نكمل، لو سحب لليمين نرجع
+    // نعيد الأنيميشن مع offset يحافظ على الاتجاه
+    // نحسب عرض نصف التراك للـ looping
+    const trackWidth = track.scrollWidth / 2;
+    let curX = getTranslateX(track);
+    // normalize curX بين -trackWidth و 0
+    let normalized = ((curX % trackWidth) + trackWidth) % trackWidth;
+    if(normalized > 0) normalized -= trackWidth;
+    // طبق التصحيح بدون انتقال
+    track.style.transition = 'none';
+    track.style.transform = `translateX(${normalized}px)`;
+    // force reflow
+    track.offsetHeight;
+    // أعد تشغيل الأنيميشن
+    track.style.animation = '';
+    track.style.animationName = 'marqueeRTL';
+    track.style.animationDuration = (window.innerWidth < 600 ? '18s' : window.innerWidth < 768 ? '24s' : '32s');
+    track.style.animationTimingFunction = 'linear';
+    track.style.animationIterationCount = 'infinite';
+    track.style.animationPlayState = 'running';
+    currentX = 0;
+  }
+  container.addEventListener('pointerup', handlePointerUp);
+  container.addEventListener('pointercancel', handlePointerUp);
+  container.addEventListener('pointerleave', (e)=>{ if(isDragging) handlePointerUp(e); });
+
+  // Auto-play إضافي للموبايل: كل 2.5 ثانية نحرك كارت واحد من اليمين للشمال ويظهر من اليمين مرة أخرى
+  // هذا يحقق طلب: "يروح من اليمين للشمال ويظهر من اليمين اول واحده راحت وهكذا"
+  let autoplayInterval;
+  let isMobileCarousel = false;
+  
+  function enableMobileCarousel(){
+    if(isMobileCarousel) return;
+    // على الشاشات الصغيرة جدا، نستخدم سلوك snap + زر جر، لكن نحافظ على marquee كأساس
+    // لا نحتاج carousel منفصل لأن marquee يحقق المطلوب، لكن نضيف دعم pause ذكي
+    isMobileCarousel = true;
+  }
+  
+  function disableMobileCarousel(){
+    isMobileCarousel = false;
+    if(autoplayInterval) clearInterval(autoplayInterval);
+  }
+
+  // استجابة لتغيير الحجم
+  function checkMode(){
+    if(window.innerWidth <= 768){
+      enableMobileCarousel();
+      track.style.animationDuration = window.innerWidth < 600 ? '18s' : '24s';
+    } else {
+      disableMobileCarousel();
+      track.style.animationDuration = '32s';
+    }
+  }
+  window.addEventListener('resize', checkMode, {passive:true});
+  checkMode();
+
+  // تحسين ظهور الكروت عند التحميل - تأكيد أن التراك يبدأ من 0 (أقصى اليمين)
+  track.style.transform = 'translateX(0)';
+})();
+</script>
+
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a293032cead3146b',t:'MTc4NjQwNjk3NQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
